@@ -16,7 +16,7 @@ public class Cup : MonoBehaviour
     /// 这个杯子里有的颜色
     /// </summary>
 
-    private List<Color> hasColor = new List<Color>();
+    public List<Color> hasColor = new List<Color>();
 
     // Start is called before the first frame update
     void Start()
@@ -87,6 +87,7 @@ public class Cup : MonoBehaviour
         Debug.Log("[zzzz]点击了" + gameObject.GetInstanceID());
 
         // TODO: 收发事件
+        // SendMessage("CLICK_CUP", hasColor);
     }
 
     // Update is called once per frame
