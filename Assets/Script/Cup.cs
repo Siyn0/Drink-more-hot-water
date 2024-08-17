@@ -16,7 +16,7 @@ public class Cup : MonoBehaviour
     /// 这个杯子里有的颜色
     /// </summary>
 
-    private Color[] hasColor = { };
+    private List<Color> hasColor = new List<Color>();
 
     // Start is called before the first frame update
     void Start()
@@ -51,8 +51,8 @@ public class Cup : MonoBehaviour
         {
             Vector3 newPos = transform.position + new Vector3(0, Global.FIRST_Y + Global.WATER_HEIGHT * n, 0);
             GameObject newWater = Instantiate(waterPrefab, newPos, transform.rotation, transform);
-            int seed = (int)DateTime.Now.Ticks + n;
             newWater.GetComponent<SpriteRenderer>().color = color;
+            hasColor.Add(color);
             n++;
         }
 
@@ -78,6 +78,16 @@ public class Cup : MonoBehaviour
         }
 
         */
+
+    /// <summary>
+    /// 玩家点到杯子
+    /// </summary>
+    public void onClickCup()
+    {
+        Debug.Log("[zzzz]点击了" + gameObject.GetInstanceID());
+
+        // TODO: 收发事件
+    }
 
     // Update is called once per frame
     void Update()
