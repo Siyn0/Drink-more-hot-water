@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Level : MonoBehaviour
@@ -123,13 +124,23 @@ public class Level : MonoBehaviour
             // 判断空位+下层颜色，上次点击杯子最上层相同颜色的方块移动到这次点击的杯子里
             if (clickColor.Equals(currentColor) || currentColor.Equals(Color.black))
             {
-                for (int layer = 4 - cup.hasColor.Count(); layer > clickLayer; layer--)
+                int moveLayer = 1;
+                for (int layer = 4 - cup.hasColor.Count; layer > clickLayer; layer--)
                 {
+                    Debug.Log("[zzzz]移动layer：" + layer);
                     cup.hasColor.Add(clickColor);
-                    Transform moveWater = lastCup.gameObject.transform.GetChild(cup.hasColor.Count() - 1);
+                    Transform moveWater = lastCup.gameObject.transform.GetChild(cup.hasColor.Count - moveLayer);
                     moveWater.SetParent(cup.gameObject.transform);
-                    Vector3 newPos = transform.position + new Vector3(0, Global.FIRST_Y + Global.WATER_HEIGHT * (cup.hasColor.Count() - 1), 0);
-                    moveWater.SetPositionAndRotation(newPos, cup.gameObject.transform.rotation);
+                    Vector3 newPos = cup.gameObject.transform.position + new Vector3(0, Global.FIRST_Y + Global.WATER_HEIGHT * (cup.hasColor.Count - moveLayer), 0);
+                    moveWater.SetPositionAndRotation(newPos, moveWater.rotation);
+                    moveLayer++;
+
+                    lastCup.hasColor.RemoveAt(lastCup.hasColor.Count - 1);
+
+                    if (moveLayer >= clickLayer)
+                    {
+                        break;
+                    }
                 }
                 clickColor = Color.black;
             }
