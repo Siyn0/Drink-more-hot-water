@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Level : MonoBehaviour
 {
@@ -11,6 +13,11 @@ public class Level : MonoBehaviour
     /// 放水的杯子数量
     /// </summary>
     public int cupCount = 4;
+
+    /// <summary>
+    /// “下一关”按钮
+    /// </summary>
+    public Button button = null;
 
     /// <summary>
     /// 当前点击的杯子最上层颜色
@@ -31,7 +38,7 @@ public class Level : MonoBehaviour
     void Start()
     {
         initCup();
-
+        initButton();
     }
 
     /// <summary>
@@ -174,6 +181,18 @@ public class Level : MonoBehaviour
             }
             clickLayer = 1;
         }
+    }
+
+    /// <summary>
+    /// 给按钮加功能
+    /// </summary>
+    private void initButton()
+    {
+        button.onClick.AddListener(() =>
+        {
+            // 哈哈我真会偷懒啊
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        });
     }
 
     // Update is called once per frame
