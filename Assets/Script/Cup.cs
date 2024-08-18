@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class Cup : MonoBehaviour
@@ -90,6 +91,14 @@ public class Cup : MonoBehaviour
         // SendMessage("CLICK_CUP", hasColor);
     }
 
+
+    /// <summary>
+    /// 哈哈，不知道咋监听，手动实现
+    /// </summary>
+    public void onChangedColor()
+    {
+        
+    }
     // Update is called once per frame
     void Update()
     {

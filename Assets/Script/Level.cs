@@ -21,6 +21,11 @@ public class Level : MonoBehaviour
     /// </summary>
     private int clickLayer = 0;
 
+    /// <summary>
+    /// 上一次点击的杯子
+    /// </summary>
+    private Cup lastCup = null;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -91,17 +96,64 @@ public class Level : MonoBehaviour
     /// <param name="cup">杯子组件</param>
     private void onClickCup(Cup cup)
     {
-        if (clickColor != Color.black)
+        /// <summary>
+        /// 最上层颜色的下标
+        /// </summary>
+        int lastIndex = cup.hasColor.Count() - 1;
+
+        /// <summary>
+        /// 准备进行移动的颜色
+        /// </summary>
+        Color currentColor = Color.black;
+
+        if (lastIndex != -1)
+        {
+            currentColor = cup.hasColor[lastIndex];
+
+        }
+
+        // 为什么局部变量不显示xml注释啊？？？
+        Debug.Log("[zzzz]-1的值是" + currentColor);
+
+        if (!clickColor.Equals(Color.black))
         {
             // 是第二次点击
-            // TODO: 判断空位+下层颜色，上次点击杯子最上层相同颜色的方块移动到这次点击的杯子里(出栈)
+            Debug.Log("[zzzz]第二次点击");
+
+            // 判断空位+下层颜色，上次点击杯子最上层相同颜色的方块移动到这次点击的杯子里
+            if (clickColor.Equals(currentColor) || currentColor.Equals(Color.black))
+            {
+                for (int layer = 4 - cup.hasColor.Count(); layer > clickLayer; layer--)
+                {
+                    cup.hasColor.Add(clickColor);
+                    Transform moveWater = lastCup.gameObject.transform.GetChild(cup.hasColor.Count() - 1);
+                    moveWater.SetParent(cup.gameObject.transform);
+                    Vector3 newPos = transform.position + new Vector3(0, Global.FIRST_Y + Global.WATER_HEIGHT * (cup.hasColor.Count() - 1), 0);
+                    moveWater.SetPositionAndRotation(newPos, cup.gameObject.transform.rotation);
+                }
+                clickColor = Color.black;
+            }
         }
         else
         {
             // 是第一次点击
-            clickColor = cup.hasColor[-1];// 哈哈不知道这样写行不？
-            Debug.Log("[zzzz]-1的值是" + clickColor);
-            // TODO: 判断下一层颜色，存数量
+
+            // clickColor = cup.hasColor[-1];// 哈哈不知道这样写行不？
+            // Debug.Log("[zzzz]-1的值是" + clickColor);// md，果然不行
+
+            clickColor = currentColor;
+            lastCup = cup;
+            for (int i = 2; i < lastIndex; i++)
+            {
+                if (currentColor.Equals(cup.hasColor[lastIndex - i]))
+                {
+                    clickLayer += 1;
+                }
+                else
+                {
+                    break;// 第二层颜色相同，+1层，否则停止判断
+                }
+            }
         }
     }
 
