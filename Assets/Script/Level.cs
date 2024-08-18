@@ -127,9 +127,9 @@ public class Level : MonoBehaviour
 
             clickColor = currentColor;
             lastCup = cup;
-            for (int i = 2; i < lastIndex; i++)
+            for (int i = lastIndex; i > 0; i--)
             {
-                if (currentColor.Equals(cup.hasColor[lastIndex - i]))
+                if (currentColor.Equals(cup.hasColor[i - 1]))
                 {
                     clickLayer += 1;
                 }
@@ -149,7 +149,8 @@ public class Level : MonoBehaviour
             if (clickColor.Equals(currentColor) || currentColor.Equals(Color.black))
             {
                 Debug.Log("[zzzz]可以移动");
-                while (clickLayer > 0)
+                int moveLayer = 1;
+                while (moveLayer <= clickLayer)
                 {
                     if (cup.hasColor.Count >= 4)
                     {
@@ -157,25 +158,21 @@ public class Level : MonoBehaviour
                         break;
                     }
 
-                    int moveLayer = 1;
-
-                    Debug.Log("[zzzz]移动layer：" + moveLayer);
                     cup.hasColor.Add(clickColor);// 向第二次点击的杯子加水
-                    Transform moveWater = lastCup.gameObject.transform.GetChild(lastCup.hasColor.Count - moveLayer);
+                    Transform moveWater = lastCup.gameObject.transform.GetChild(lastCup.hasColor.Count - 1);
                     moveWater.SetParent(cup.gameObject.transform);
-                    Vector3 newPos = cup.gameObject.transform.position + new Vector3(0, Global.FIRST_Y + Global.WATER_HEIGHT * (moveLayer - 2 + cup.hasColor.Count), 0);
+                    Vector3 newPos = cup.gameObject.transform.position + new Vector3(0, Global.FIRST_Y + Global.WATER_HEIGHT * (cup.hasColor.Count - 1), 0);
                     moveWater.SetPositionAndRotation(newPos, moveWater.rotation);
                     moveLayer++;
+                    Debug.Log("[zzzz]移动了一层");
 
                     lastCup.hasColor.RemoveAt(lastCup.hasColor.Count - 1);
 
-                    if (moveLayer >= clickLayer)
-                    {
-                        break;
-                    }
+
                 }
                 clickColor = Color.black;
             }
+            clickLayer = 1;
         }
     }
 
