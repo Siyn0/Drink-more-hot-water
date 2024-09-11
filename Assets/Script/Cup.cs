@@ -50,7 +50,7 @@ public class Cup : MonoBehaviour
         int n = 0;
         foreach (var color in colorArray)
         {
-            Vector3 newPos = transform.position + new Vector3(0, Global.FIRST_Y + Global.WATER_HEIGHT * n, 0);
+            Vector3 newPos = transform.position + new Vector3(0, Global.FIRST_Y + Global.WATER_HEIGHT * n, -1);
             GameObject newWater = Instantiate(waterPrefab, newPos, transform.rotation, transform);
             newWater.GetComponent<SpriteRenderer>().color = color;
             hasColor.Add(color);
@@ -97,7 +97,7 @@ public class Cup : MonoBehaviour
     /// </summary>
     public void onChangedColor()
     {
-        
+
     }
     // Update is called once per frame
     void Update()
